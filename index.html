@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <script src="js/campo-minado.js"></script>
+        <style>
+          body{
+            background-color: darkgrey;
+          }
+
+        </style>
+    </head>
+    <body>
+        <div id="exibir-execucao"></div>
+
+
+        <script>
+            var campoMinado = new CampoMinado();
+
+
+            document.getElementById('exibir-execucao').innerHTML += '----------- Início do jogo -----------';
+            document.getElementById('exibir-execucao').innerHTML += '<pre>' + campoMinado.Tabuleiro() + '</pre>';
+            // Realize sua codificação a partir deste ponto, boa sorte!
+
+            //Cria um jogo auxiliar para analisar aonde tem bombas
+            var aux = new CampoMinado();
+            //variavel contador que auxilia a ter o controle do array tabuleiro
+            var cont= -1;
+
+            //2 for para percorrer o jogo em formato matriz
+            // são 10 posições pelo fato do tabuleiro separar as linhas por uma casa vazia
+            for(var x = 1; x<11; x++)
+            {
+                for (var y = 1; y<11 ; y++)
+                {
+
+                    if(aux.Tabuleiro()[cont+x] == "-")//filtro para que apenas sejam abertas casas fechadas no vetor auxiliar
+                    {
+                      aux.Abrir(x,y);
+                      if (aux.Tabuleiro()[cont+x] != "*")//filtro para que apenas casas sem bombas sejam futuramente abertas no jogo principal
+                      {
+                          if (campoMinado.Tabuleiro()[cont+x] == '-')//se a casa na posição indicada estiver fechada abra
+                          {
+                              document.getElementById('exibir-execucao').innerHTML += 'Abrindo Casa: Linha (' + x + ') Coluna ('+ y + ')' + '</br>';
+                              campoMinado.Abrir(x,y); //metodo para abrir no tabuleiro principal
+                              document.getElementById('exibir-execucao').innerHTML += '<pre>' + campoMinado.Tabuleiro() + '</pre>'
+
+                              if(campoMinado.JogoStatus()==0)
+                              {
+                                document.getElementById('exibir-execucao').innerHTML += '----------- Status: Jogo em aberto -----------' + '</br>';
+                              }
+                              else if (campoMinado.JogoStatus()==2)
+                              {
+                                document.getElementById('exibir-execucao').innerHTML += '----------- Status: Derrota -----------' + '</br>';
+                              }
+                          }
+                      }
+                      else
+                      {
+                          document.getElementById('exibir-execucao').innerHTML += 'Bomba Encontrada: Linha (' + x + ') Coluna ('+ y + ')'+ '</br>';
+                      }
+                    }
+                    cont++;
+
+                  }
+              }
+
+
+              if (campoMinado.JogoStatus()==1) //Mostra a Vitoria se verdadeira + o tabuleiro resolvido
+              {
+                document.getElementById('exibir-execucao').innerHTML += '----------- Status: Vitoria -----------' + '</br>';
+                document.getElementById('exibir-execucao').innerHTML += '<pre>' + campoMinado.Tabuleiro() + '</pre>';
+              }
+
+
+
+        </script>
+    </body>
+</html>
